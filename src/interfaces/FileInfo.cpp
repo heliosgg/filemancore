@@ -3,7 +3,6 @@
 namespace FileManCore {
 
     Napi::Object FileType::ToNapiObject() {
-
         Napi::Object result;
         Napi::Object attributes;
 
@@ -16,9 +15,11 @@ namespace FileManCore {
         if (m_size.IsSet())
             result.Set("size", m_size.Get());
         
+        // TODO: convert to napi date
         if (m_lastModified.IsSet())
             result.Set("lastModified", m_lastModified.Get());
 
+        // TODO: convert to napi date
         if (m_created.IsSet())
             result.Set("created", m_created.Get());
         
