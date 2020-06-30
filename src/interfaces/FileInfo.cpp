@@ -2,9 +2,9 @@
 
 namespace FileManCore {
 
-    Napi::Object FileType::ToNapiObject() {
-        Napi::Object result;
-        Napi::Object attributes;
+    Napi::Object FileInfo::ToNapiObject(Napi::Env env) {
+        Napi::Object result = Napi::Object::New(env);
+        Napi::Object attributes = Napi::Object::New(env);
 
         result.Set("path", m_path);
         result.Set("name", m_name);

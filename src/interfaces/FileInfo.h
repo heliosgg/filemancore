@@ -12,15 +12,15 @@ namespace FileManCore {
         T m_value;
         bool m_isSet;
     public:
-        OptionalParam(): isSet(false);
+        OptionalParam(): m_isSet(false) {};
 
-        void Set(T value) { value = this.value; isSet = true; }
-        T Get() { return value; }
+        void Set(T value) { value = this->m_value; m_isSet = true; }
+        T Get() { return m_value; }
 
         bool IsSet() { return m_isSet; }
     };
 
-    class FileType {
+    class FileInfo {
     private:
         typedef DWORD SIZETYPE;
         typedef DWORD LASTMODIFIEDTYPE;
@@ -46,10 +46,10 @@ namespace FileManCore {
         Attributes m_attributes;
 
     public:
-        FileType(): m_init(false) {}
+        FileInfo(): m_init(false) {}
 
-        bool InitFromNapiObject(Napi::Env env, Napi::Object obj) {};
-        Napi::Object ToNapiObject();
+        bool InitFromNapiObject(Napi::Env env, Napi::Object obj) { return false; }; // TODO: implement this
+        Napi::Object ToNapiObject(Napi::Env env);
 
         void SetInit(bool value = true) { m_init = value; }
         bool GetInit() { return m_init; }

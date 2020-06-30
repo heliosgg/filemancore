@@ -9,6 +9,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     ADD_EXPORT(helloWorld);
     ADD_EXPORT(helloUser);
+    ADD_EXPORT(listDir);
 
 #undef ADD_EXPORT
 

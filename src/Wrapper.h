@@ -2,17 +2,19 @@
 
 #include <napi.h>
 #include <sstream>
+#include <Windows.h>
 
-#ifndef NAPI_CB_ARGS
-    #define NAPI_CB_ARGS const Napi::CallbackInfo& args
-#endif
+#include "defs.h"
 
 namespace FileManCore {
 
     namespace NapiWrapper {
 
+        // TODO: remove it
         Napi::String helloWorld(NAPI_CB_ARGS);
         Napi::String helloUser(NAPI_CB_ARGS);
+        
+        Napi::Array listDir(NAPI_CB_ARGS);
 
     };
 
