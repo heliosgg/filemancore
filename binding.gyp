@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "fileman_core",
+      "target_name": "filemancore",
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
       "sources": [
