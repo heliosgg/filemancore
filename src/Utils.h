@@ -22,12 +22,12 @@ namespace FileManCore {
         }
 
         namespace Path {
-        /**
-         * Path normalizer
-         * Src: http://pdh11.blogspot.com/2009/05/pathcanonicalize-versus-what-it-says-on.html
-         * Not tested :D
-         */
-        std::u16string Canonicalise(const std::u16string& path);
+            /**
+             * Path normalizer
+             * Src: http://pdh11.blogspot.com/2009/05/pathcanonicalize-versus-what-it-says-on.html
+             * Not tested :D
+             */
+            std::u16string Canonicalise(const std::u16string& path);
     }
     }
 }

@@ -19,8 +19,6 @@ namespace FileManCore {
             std::u16string searchMask = args[0].ToString().Utf16Value();
             std::u16string rootDir;
 
-            std::replace(searchMask.begin(), searchMask.end(), u'/', u'\\');
-
             // Check if it is not a mask
             if (searchMask.rfind(u'*') == std::u16string::npos && searchMask.rfind(u'?') == std::u16string::npos) {
                 if (searchMask.back() != u'\\') {
@@ -49,6 +47,10 @@ namespace FileManCore {
             uint16_t iter = 0;
 
             do {
+                // Skip "." (current dir)
+                if (FindFileData.cFileName[0] == L'.' && FindFileData.cFileName[0] == L'\0')
+                    continue;
+
                 TempFileInfo.ResetFields();
 
                 TempFileInfo.SetPath(rootDir);
