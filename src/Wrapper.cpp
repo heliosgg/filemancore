@@ -14,9 +14,27 @@ namespace FileManCore {
                 return Napi::Array();
             }
 
+            std::u16string searchMask = args[0].ToString().Utf16Value();
+            std::u16string rootDir;
+
+            std::replace(searchMask.begin(), searchMask.end(), u'/', u'\\');
+
+            // Check if it is not a mask
+            if (searchMask.rfind(u'*') == std::u16string::npos && searchMask.rfind(u'?') == std::u16string::npos) {
+                if (searchMask.back() != u'\\') {
+                    searchMask.reserve(searchMask.size() + 2);
+                    searchMask.append(u"\\");
+                }
+
+                rootDir.assign(searchMask);
+                searchMask.append(u"*");
+            }
+            else {
+                rootDir.assign(searchMask.substr(0, searchMask.rfind(u'\\') + 1));
+            }
+
             WIN32_FIND_DATAW FindFileData;
-            std::u16string root_dir = args[0].ToString().Utf16Value();
-            HANDLE hFind = FindFirstFileW((LPWSTR)root_dir.c_str(), &FindFileData);
+            HANDLE hFind = FindFirstFileW((LPWSTR)searchMask.c_str(), &FindFileData);
             FileManCore::FileInfo TempFileInfo;
 
             if (hFind == INVALID_HANDLE_VALUE) {
@@ -29,7 +47,7 @@ namespace FileManCore {
             do {
                 TempFileInfo.ResetFields();
 
-                TempFileInfo.SetPath(root_dir);
+                TempFileInfo.SetPath(rootDir);
                 TempFileInfo.SetName((char16_t*)FindFileData.cFileName);
                 TempFileInfo.SetSize({ FindFileData.nFileSizeHigh, FindFileData.nFileSizeLow });
                 TempFileInfo.SetLastModified(FindFileData.ftLastWriteTime);

@@ -24,9 +24,6 @@ namespace FileManCore {
                 return true;
             }
 
-            /**
-            * Convert a std::chrono::system_clock::time_point to FILETIME. 
-            */ 
             bool TimePoint2FileTime(const std::chrono::system_clock::time_point& tp, FILETIME& result)
             {
                 using namespace std;

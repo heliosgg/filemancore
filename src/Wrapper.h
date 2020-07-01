@@ -3,6 +3,7 @@
 #include <napi.h>
 #include <sstream>
 #include <Windows.h>
+#include <algorithm>
 
 #include "defs.h"
 
