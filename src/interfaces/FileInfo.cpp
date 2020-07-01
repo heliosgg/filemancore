@@ -21,8 +21,9 @@ namespace FileManCore {
             std::chrono::system_clock::time_point tp =
                 std::chrono::system_clock::time_point((std::chrono::system_clock::time_point::min)());
             FILETIME ft = m_lastModified.Get();
+            FILETIME lt;
 
-            if (Utils::Time::FileTime2TimePoint(ft, tp))
+            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Time::FileTime2TimePoint(lt, tp))
             {
                 
                 result.Set("lastModified", Napi::Date::New(env,
@@ -35,8 +36,9 @@ namespace FileManCore {
             std::chrono::system_clock::time_point tp =
                 std::chrono::system_clock::time_point((std::chrono::system_clock::time_point::min)());
             FILETIME ft = m_created.Get();
+            FILETIME lt;
 
-            if (Utils::Time::FileTime2TimePoint(ft, tp))
+            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Time::FileTime2TimePoint(lt, tp))
             {
                 
                 result.Set("created", Napi::Date::New(env,
