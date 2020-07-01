@@ -1,5 +1,7 @@
 #include "Wrapper.h"
+
 #include "interfaces/FileInfo.h"
+#include "Utils.h"
 
 namespace FileManCore {
 
@@ -32,6 +34,8 @@ namespace FileManCore {
             else {
                 rootDir.assign(searchMask.substr(0, searchMask.rfind(u'\\') + 1));
             }
+
+            rootDir = Utils::Path::Canonicalise(rootDir);
 
             WIN32_FIND_DATAW FindFileData;
             HANDLE hFind = FindFirstFileW((LPWSTR)searchMask.c_str(), &FindFileData);
