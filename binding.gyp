@@ -6,6 +6,7 @@
       "cflags_cc!": [ "-fno-exceptions" ],
       "sources": [
         "./src/index.cpp",
+        "./src/Utils.cpp",
         "./src/Wrapper.cpp",
         "./src/interfaces/FileInfo.cpp"
       ],

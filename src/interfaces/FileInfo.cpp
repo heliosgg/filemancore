@@ -1,4 +1,5 @@
 #include "FileInfo.h"
+#include "../Utils.h"
 
 namespace FileManCore {
 
@@ -8,20 +9,40 @@ namespace FileManCore {
 
         result.Set("path", m_path);
         result.Set("name", m_name);
-        result.Set("accessible", m_accessible);
-        result.Set("accessible", m_accessible);
 
         // Optional params
-        if (m_size.IsSet())
-            result.Set("size", m_size.Get());
+        if (m_size.IsSet()) {
+            SIZETYPE size = m_size.Get();
+            result.Set("size", (DWORD64)((DWORD64)size.nFileSizeHigh << 32 | (DWORD64)size.nFileSizeLow));
+        }
         
-        // TODO: convert to napi date
         if (m_lastModified.IsSet())
-            result.Set("lastModified", m_lastModified.Get());
+        {
+            std::chrono::system_clock::time_point tp =
+                std::chrono::system_clock::time_point((std::chrono::system_clock::time_point::min)());
+            FILETIME ft = m_lastModified.Get();
 
-        // TODO: convert to napi date
+            if (Utils::Time::FileTime2TimePoint(ft, tp))
+            {
+                
+                result.Set("lastModified", Napi::Date::New(env,
+                    std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count()));
+            }
+        }
+
         if (m_created.IsSet())
-            result.Set("created", m_created.Get());
+        {
+            std::chrono::system_clock::time_point tp =
+                std::chrono::system_clock::time_point((std::chrono::system_clock::time_point::min)());
+            FILETIME ft = m_created.Get();
+
+            if (Utils::Time::FileTime2TimePoint(ft, tp))
+            {
+                
+                result.Set("created", Napi::Date::New(env,
+                    std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count()));
+            }
+        }
         
         // Attributes
         attributes.Set("hidden", m_attributes.hidden);
@@ -32,6 +53,15 @@ namespace FileManCore {
         result.Set("attributes", attributes);
 
         return result;
+    }
+
+    void FileInfo::ResetFields() {
+        m_path.assign(u"");
+        m_name.assign(u"");
+        m_size.Reset();
+        m_lastModified.Reset();
+        m_created.Reset();
+        ZeroMemory(&m_attributes, sizeof(m_attributes));
     }
 
 }
