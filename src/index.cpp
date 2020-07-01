@@ -7,8 +7,6 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 #define ADD_EXPORT(x) exports.Set(  Napi::String::New(env, #x),\
                                     Napi::Function::New(env, FileManCore::NapiWrapper::x))
 
-    ADD_EXPORT(helloWorld);
-    ADD_EXPORT(helloUser);
     ADD_EXPORT(listDir);
 
 #undef ADD_EXPORT
