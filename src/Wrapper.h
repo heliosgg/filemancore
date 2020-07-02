@@ -12,6 +12,7 @@ namespace FileManCore {
     namespace NapiWrapper {
         
         Napi::Array listDir(NAPI_CB_ARGS);
+        Napi::String normalizePath(NAPI_CB_ARGS);
 
     };
 

@@ -72,6 +72,22 @@ namespace FileManCore {
             return result;
         }
 
+        Napi::String normalizePath(NAPI_CB_ARGS) {
+            Napi::Env env = args.Env();
+
+            if (args.Length() != 1) {
+                Utils::NapiHelpers::BuildException(env, "normalizePath: function takes only 1 argument").ThrowAsJavaScriptException();
+                return Napi::String();
+            }
+
+            if (!args[0].IsString()) {
+                Utils::NapiHelpers::BuildException(env, "normalizePath: first param is not string").ThrowAsJavaScriptException();
+                return Napi::String();
+            }
+
+            return Napi::String::New(env, Utils::Path::Canonicalise(args[0].ToString().Utf16Value()));
+        }
+
     }
 
 }

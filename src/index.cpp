@@ -8,6 +8,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
                                     Napi::Function::New(env, FileManCore::NapiWrapper::x))
 
     ADD_EXPORT(listDir);
+    ADD_EXPORT(normalizePath);
 
 #undef ADD_EXPORT
 
