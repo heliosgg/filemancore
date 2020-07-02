@@ -1,5 +1,7 @@
 #pragma once
 
+#include <napi.h>
+
 #include <Windows.h>
 #include <string>
 #include <chrono>
@@ -28,6 +30,10 @@ namespace FileManCore {
              * Not tested :D
              */
             std::u16string Canonicalise(const std::u16string& path);
-    }
+        }
+
+        namespace NapiHelpers {
+            Napi::Error BuildException(Napi::Env env, LPCSTR fmt, ...);
+        }
     }
 }

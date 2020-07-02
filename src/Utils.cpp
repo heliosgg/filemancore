@@ -170,5 +170,19 @@ namespace FileManCore {
                 return utf16;
             }
         }
+
+        
+        namespace NapiHelpers {
+            Napi::Error BuildException(Napi::Env env, LPCSTR fmt, ...) {
+                CHAR szErrorMessage[255];
+                va_list args;
+
+                va_start(args, fmt);
+                vsnprintf(szErrorMessage, sizeof(szErrorMessage), fmt, args);
+                va_end(args);
+
+                return Napi::Error::New(env, szErrorMessage);
+            }
+        }
     }
 }

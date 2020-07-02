@@ -11,8 +11,13 @@ namespace FileManCore {
             Napi::Env env = args.Env();
             Napi::Array result = Napi::Array::New(env);
 
+            if (args.Length() != 1) {
+                Utils::NapiHelpers::BuildException(env, "listDir: function takes only 1 argument").ThrowAsJavaScriptException();
+                return Napi::Array();
+            }
+
             if (!args[0].IsString()) {
-                Napi::Error::New(env, "listDir: first param is not string").ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(env, "listDir: first param is not string").ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
@@ -40,7 +45,7 @@ namespace FileManCore {
             FileManCore::FileInfo TempFileInfo;
 
             if (hFind == INVALID_HANDLE_VALUE) {
-                Napi::Error::New(env, "listDir: FindFirstFileW failed").ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(env, "listDir: FindFirstFileW failed. Last error: 0x%x", GetLastError()).ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
