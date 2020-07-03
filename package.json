@@ -4,6 +4,10 @@
   "description": "Set of C++ implemented functions for working with file system.",
   "main": "./lib/index.js",
   "homepage": "https://github.com/heliosgg/filemancore",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/heliosgg/filemancore.git"
+  },
   "files": [
     "binding.gyp",
     "scripts/",
