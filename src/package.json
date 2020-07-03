@@ -18,7 +18,8 @@
     "rebuild": "node-gyp -j 16 rebuild",
     "clean": "node-gyp clean",
     "install": "node scripts/install.js",
-    "postinstall": "node scripts/post-install.js"
+    "postinstall": "node scripts/post-install.js",
+    "tsc": "tsc -b ./tsconfig.json"
   },
   "keywords": [],
   "author": "Andrey Ivanov",
@@ -26,6 +27,6 @@
   "dependencies": {
     "@types/node": "^14.0.14",
     "node-addon-api": "^3.0.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   }
 }
