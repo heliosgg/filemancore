@@ -1,6 +1,6 @@
 {
   "name": "filemancore",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Set of C++ implemented functions for working with file system.",
   "main": "./lib/index.js",
   "homepage": "https://github.com/heliosgg/filemancore",
@@ -19,7 +19,8 @@
     "clean": "node-gyp clean",
     "install": "node scripts/install.js",
     "postinstall": "node scripts/post-install.js",
-    "tsc": "tsc -b ./tsconfig.json"
+    "tsc": "tsc -b ./tsconfig.json",
+    "prepublish": "npm run tsc"
   },
   "keywords": [],
   "author": "Andrey Ivanov",

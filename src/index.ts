@@ -15,4 +15,4 @@ function normalizePath(path: string): string {
   return fmCore.normalizePath(path);
 }
 
-export { listDir, normalizePath };
+export { listDir, normalizePath, FileInfo };
