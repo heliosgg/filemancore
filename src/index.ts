@@ -1,6 +1,6 @@
 import { FileInfo } from './interfaces';
 
-var fmCore;
+var fmCore: any;
 if (process.platform === 'win32') {
   fmCore = require('../build/Release/filemancore.node');
 } else {
