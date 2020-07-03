@@ -1,10 +1,7 @@
 .vscode/*
-
-index.js
-index.ts
 package-lock.json
-
-!lib/index.js
-
 build/*
 node_modules/*
+lib/* 
+index.js
+index.ts
