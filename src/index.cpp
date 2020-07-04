@@ -9,6 +9,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     ADD_EXPORT(listDir);
     ADD_EXPORT(normalizePath);
+    ADD_EXPORT(moveFile);
 
 #undef ADD_EXPORT
 

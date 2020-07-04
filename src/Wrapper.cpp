@@ -17,7 +17,7 @@ namespace FileManCore {
             }
 
             if (!args[0].IsString()) {
-                Utils::NapiHelpers::BuildException(env, "listDir: first param is not string").ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(env, "listDir: 1st param must be string").ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
@@ -81,11 +81,40 @@ namespace FileManCore {
             }
 
             if (!args[0].IsString()) {
-                Utils::NapiHelpers::BuildException(env, "normalizePath: first param is not string").ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(env, "normalizePath: 1st param must be string").ThrowAsJavaScriptException();
                 return Napi::String();
             }
 
             return Napi::String::New(env, Utils::Path::Canonicalise(args[0].ToString().Utf16Value()));
+        }
+        
+        Napi::Boolean moveFile(NAPI_CB_ARGS) {
+            Napi::Env env = args.Env();
+
+            if (args.Length() != 2) {
+                Utils::NapiHelpers::BuildException(env, "moveFile: function takes 2 arguments").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            if (!args[0].IsString()) {
+                Utils::NapiHelpers::BuildException(env, "moveFile: 1st param must be string").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            if (!args[1].IsString()) {
+                Utils::NapiHelpers::BuildException(env, "moveFile: 2nd param must be string").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            std::u16string existingFileName = args[0].ToString().Utf16Value();
+            std::u16string newFileName = args[1].ToString().Utf16Value();
+
+            if (!MoveFileW((LPWSTR)existingFileName.c_str(), (LPWSTR)newFileName.c_str())) {
+                Utils::NapiHelpers::BuildException(env, "moveFile: MoveFileW failed. Last error: 0x%x", GetLastError()).ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            return Napi::Boolean::New(env, true);
         }
 
     }

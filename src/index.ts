@@ -15,4 +15,8 @@ function normalizePath(path: string): string {
   return fmCore.normalizePath(path);
 }
 
-export { listDir, normalizePath, FileInfo };
+function moveFile(existingFileName: string, newFileName: string): boolean {
+  return fmCore.moveFile(existingFileName, newFileName);
+}
+
+export { listDir, normalizePath, moveFile, FileInfo };
