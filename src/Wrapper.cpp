@@ -45,7 +45,10 @@ namespace FileManCore {
             FileManCore::FileInfo TempFileInfo;
 
             if (hFind == INVALID_HANDLE_VALUE) {
-                Utils::NapiHelpers::BuildException(env, "listDir: FindFirstFileW failed. Last error: 0x%x", GetLastError()).ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(
+                    env,
+                    "listDir: FindFirstFileW failed. Last error: %S",
+                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
@@ -110,7 +113,10 @@ namespace FileManCore {
             std::u16string newFileName = args[1].ToString().Utf16Value();
 
             if (!MoveFileW((LPWSTR)existingFileName.c_str(), (LPWSTR)newFileName.c_str())) {
-                Utils::NapiHelpers::BuildException(env, "moveFile: MoveFileW failed. Last error: 0x%x", GetLastError()).ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(
+                    env,
+                    "moveFile: MoveFileW failed. Last error: %S",
+                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
                 return Napi::Boolean::New(env, false);
             }
 

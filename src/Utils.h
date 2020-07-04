@@ -34,6 +34,7 @@ namespace FileManCore {
 
         namespace NapiHelpers {
             Napi::Error BuildException(Napi::Env env, LPCSTR fmt, ...);
+            std::u16string GetLastErrorAsString();
         }
     }
 }
