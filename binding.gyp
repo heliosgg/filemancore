@@ -3,10 +3,10 @@
     {
       "target_name": "filemancore",
       "sources": [
-        "./src/index.cpp",
-        "./src/Utils.cpp",
-        "./src/Wrapper.cpp",
-        "./src/interfaces/FileInfo.cpp"
+        "./src/cpp/index.cpp",
+        "./src/cpp/Utils.cpp",
+        "./src/cpp/Wrapper.cpp",
+        "./src/cpp/interfaces/FileInfo.cpp"
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")"
