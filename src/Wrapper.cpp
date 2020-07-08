@@ -9,7 +9,6 @@ namespace FileManCore {
         
         Napi::Array listDir(NAPI_CB_ARGS) {
             Napi::Env env = args.Env();
-            Napi::Array result = Napi::Array::New(env);
 
             if (args.Length() != 1) {
                 Utils::NapiHelpers::BuildException(env, "listDir: function takes only 1 argument").ThrowAsJavaScriptException();
@@ -54,9 +53,10 @@ namespace FileManCore {
 
             uint16_t iter = 0;
 
+            Napi::Array result = Napi::Array::New(env);
             do {
                 // Skip "." (current dir)
-                if (FindFileData.cFileName[0] == L'.' && FindFileData.cFileName[0] == L'\0')
+                if (FindFileData.cFileName[0] == L'.' && FindFileData.cFileName[1] == L'\0')
                     continue;
 
                 TempFileInfo.ResetFields();
