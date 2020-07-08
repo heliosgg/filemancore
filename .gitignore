@@ -5,3 +5,4 @@ node_modules/*
 lib/* 
 index.js
 index.ts
+!src/ts/index.ts
