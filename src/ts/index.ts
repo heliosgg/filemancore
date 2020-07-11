@@ -11,6 +11,10 @@ function listDir(path: string): FileInfo[] {
   return fmCore.listDir(path);
 }
 
+function listDrives(): string[] {
+  return fmCore.listDrives();
+}
+
 function normalizePath(path: string): string {
   return fmCore.normalizePath(path);
 }
@@ -19,4 +23,4 @@ function moveFile(existingFileName: string, newFileName: string): boolean {
   return fmCore.moveFile(existingFileName, newFileName);
 }
 
-export { listDir, normalizePath, moveFile, FileInfo };
+export { listDir, listDrives, normalizePath, moveFile, FileInfo };

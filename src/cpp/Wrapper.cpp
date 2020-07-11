@@ -74,6 +74,40 @@ namespace FileManCore {
 
             return result;
         }
+        
+        Napi::Array listDrives(NAPI_CB_ARGS) {
+            Napi::Env env = args.Env();
+
+            if (args.Length() != 0){
+                Utils::NapiHelpers::BuildException(env, "listDrives: FindFirstFileW failed. Last error: %S").ThrowAsJavaScriptException();
+                return Napi::Array();
+            }
+
+            DWORD uDriveMask = GetLogicalDrives();
+
+            if(uDriveMask == 0) {
+                Utils::NapiHelpers::BuildException(
+                    env,
+                    "listDrives: GetLogicalDrives failed. Last error: %S",
+                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+                return Napi::Array();
+            }
+
+            uint16_t iter = 0;
+            char16_t currentDrive[] = u"A:\\";
+
+            Napi::Array result = Napi::Array::New(env);
+            while(uDriveMask) {
+                if(uDriveMask & 1) {
+                    result.Set(iter++, Napi::String::New(env, currentDrive));
+                }                    
+
+                ++currentDrive[0];
+                uDriveMask >>= 1;
+            }
+
+            return result;
+        }
 
         Napi::String normalizePath(NAPI_CB_ARGS) {
             Napi::Env env = args.Env();
