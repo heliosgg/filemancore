@@ -4,6 +4,8 @@
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
+    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+
 #define ADD_EXPORT(x) exports.Set(  Napi::String::New(env, #x),\
                                     Napi::Function::New(env, FileManCore::NapiWrapper::x))
 
@@ -11,6 +13,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     ADD_EXPORT(listDrives);
     ADD_EXPORT(normalizePath);
     ADD_EXPORT(moveFile);
+    ADD_EXPORT(openWithDefaultApp);
 
 #undef ADD_EXPORT
 

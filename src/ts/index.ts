@@ -23,4 +23,8 @@ function moveFile(existingFileName: string, newFileName: string): boolean {
   return fmCore.moveFile(existingFileName, newFileName);
 }
 
-export { listDir, listDrives, normalizePath, moveFile, FileInfo };
+function openWithDefaultApp(filePath: string): boolean {
+  return fmCore.openWithDefaultApp(filePath);
+}
+
+export { listDir, listDrives, normalizePath, moveFile, openWithDefaultApp, FileInfo };

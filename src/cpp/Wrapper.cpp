@@ -157,6 +157,28 @@ namespace FileManCore {
             return Napi::Boolean::New(env, true);
         }
 
+        Napi::Boolean openWithDefaultApp(NAPI_CB_ARGS) {
+            Napi::Env env = args.Env();
+
+            if (args.Length() != 1) {
+                Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: function takes only 1 argument").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            if (!args[0].IsString()) {
+                Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: 1st param must be string").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            std::u16string filePath = args[0].ToString().Utf16Value();
+
+            if (ShellExecuteW(NULL, L"open", (LPWSTR)filePath.c_str(), NULL, NULL, SW_SHOW) <= (HINSTANCE)32) {
+                Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: ShellExecute failed").ThrowAsJavaScriptException();
+                return Napi::Boolean::New(env, false);
+            }
+
+            return Napi::Boolean::New(env, true);
+        }
     }
 
 }
