@@ -1,6 +1,6 @@
 {
   "name": "filemancore",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Set of C++ implemented functions for working with file system.",
   "main": "./lib/index.js",
   "homepage": "https://github.com/heliosgg/filemancore",
