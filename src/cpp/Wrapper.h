@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <shellapi.h>
 
-#include "defs.h"
+#include "utils/Utils.h"
+#include "FmcDefs.h"
 
 namespace FileManCore {
 

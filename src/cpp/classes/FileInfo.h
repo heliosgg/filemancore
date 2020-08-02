@@ -4,7 +4,7 @@
 #include <string>
 #include <napi.h>
 
-#include "../defs.h"
+#include "Attributes.h"
 
 namespace FileManCore {
 

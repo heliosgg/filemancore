@@ -1,6 +1,6 @@
 #include "Wrapper.h"
 
-#include "interfaces/FileInfo.h"
+#include "classes/FileInfo.h"
 #include "Utils.h"
 
 namespace FileManCore {
@@ -37,7 +37,10 @@ namespace FileManCore {
                 rootDir.assign(searchMask.substr(0, searchMask.rfind(u'\\') + 1));
             }
 
-            rootDir = Utils::Path::Canonicalise(rootDir);
+            if (Utils::Path::Canonicalise(rootDir, rootDir) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "listDir: Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
+                return Napi::Array();
+            }
 
             WIN32_FIND_DATAW FindFileData;
             HANDLE hFind = FindFirstFileW((LPWSTR)searchMask.c_str(), &FindFileData);
@@ -47,7 +50,7 @@ namespace FileManCore {
                 Utils::NapiHelpers::BuildException(
                     env,
                     "listDir: FindFirstFileW failed. Last error: %S",
-                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+                    Utils::Win::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
@@ -83,27 +86,16 @@ namespace FileManCore {
                 return Napi::Array();
             }
 
-            DWORD uDriveMask = GetLogicalDrives();
-
-            if(uDriveMask == 0) {
-                Utils::NapiHelpers::BuildException(
-                    env,
-                    "listDrives: GetLogicalDrives failed. Last error: %S",
-                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+            std::vector<std::u16string> vecDrives;
+            if (Utils::FileSystem::ListDrives(env, vecDrives) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "listDrives: FileManCore::Utils::FileSystem::ListDrives failed.").ThrowAsJavaScriptException();
                 return Napi::Array();
             }
 
-            uint16_t iter = 0;
-            char16_t currentDrive[] = u"A:\\";
-
             Napi::Array result = Napi::Array::New(env);
-            while(uDriveMask) {
-                if(uDriveMask & 1) {
-                    result.Set(iter++, Napi::String::New(env, currentDrive));
-                }                    
-
-                ++currentDrive[0];
-                uDriveMask >>= 1;
+            if (Utils::NapiHelpers::StringVectorToArray(env, vecDrives, result) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "listDrives: FileManCore::Utils::NapiHelpers::StringVectorToArray failed.").ThrowAsJavaScriptException();
+                return Napi::Array();
             }
 
             return result;
@@ -122,7 +114,13 @@ namespace FileManCore {
                 return Napi::String();
             }
 
-            return Napi::String::New(env, Utils::Path::Canonicalise(args[0].ToString().Utf16Value()));
+            std::u16string path = args[0].ToString().Utf16Value();
+            if (Utils::Path::Canonicalise(path, path) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "normalizePath: Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
+                return Napi::String();
+            }
+
+            return Napi::String::New(env, path);
         }
         
         Napi::Boolean moveFile(NAPI_CB_ARGS) {
@@ -146,13 +144,8 @@ namespace FileManCore {
             std::u16string existingFileName = args[0].ToString().Utf16Value();
             std::u16string newFileName = args[1].ToString().Utf16Value();
 
-            if (!MoveFileW((LPWSTR)existingFileName.c_str(), (LPWSTR)newFileName.c_str())) {
-                Utils::NapiHelpers::BuildException(
-                    env,
-                    "moveFile: MoveFileW failed. Last error: %S",
-                    Utils::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+            if (FileManCore::Utils::FileSystem::MoveFile(env, existingFileName, newFileName) != FMC_OK)
                 return Napi::Boolean::New(env, false);
-            }
 
             return Napi::Boolean::New(env, true);
         }
