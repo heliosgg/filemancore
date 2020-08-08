@@ -1,7 +1,7 @@
 #include "Wrapper.h"
 
 #include "classes/FileInfo.h"
-#include "Utils.h"
+#include "utils/Utils.h"
 
 namespace FileManCore {
 
@@ -21,59 +21,17 @@ namespace FileManCore {
             }
 
             std::u16string searchMask = args[0].ToString().Utf16Value();
-            std::u16string rootDir;
-
-            // Check if it is not a mask
-            if (searchMask.rfind(u'*') == std::u16string::npos && searchMask.rfind(u'?') == std::u16string::npos) {
-                if (searchMask.back() != u'\\') {
-                    searchMask.reserve(searchMask.size() + 2);
-                    searchMask.append(u"\\");
-                }
-
-                rootDir.assign(searchMask);
-                searchMask.append(u"*");
-            }
-            else {
-                rootDir.assign(searchMask.substr(0, searchMask.rfind(u'\\') + 1));
-            }
-
-            if (Utils::Path::Canonicalise(rootDir, rootDir) != FMC_OK) {
-                Utils::NapiHelpers::BuildException(env, "listDir: Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
+            std::vector<FileManCore::FileInfo> dirVector;
+            if (Utils::FileSystem::ListDir(env, searchMask, dirVector) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "listDir: FileManCore::Utils::FileSystem::ListDir failed.").ThrowAsJavaScriptException();
                 return Napi::Array();
             }
-
-            WIN32_FIND_DATAW FindFileData;
-            HANDLE hFind = FindFirstFileW((LPWSTR)searchMask.c_str(), &FindFileData);
-            FileManCore::FileInfo TempFileInfo;
-
-            if (hFind == INVALID_HANDLE_VALUE) {
-                Utils::NapiHelpers::BuildException(
-                    env,
-                    "listDir: FindFirstFileW failed. Last error: %S",
-                    Utils::Win::NapiHelpers::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
-                return Napi::Array();
-            }
-
-            uint16_t iter = 0;
 
             Napi::Array result = Napi::Array::New(env);
-            do {
-                // Skip "." (current dir)
-                if (FindFileData.cFileName[0] == L'.' && FindFileData.cFileName[1] == L'\0')
-                    continue;
-
-                TempFileInfo.ResetFields();
-
-                TempFileInfo.SetPath(rootDir);
-                TempFileInfo.SetName((char16_t*)FindFileData.cFileName);
-                TempFileInfo.SetSize({ FindFileData.nFileSizeHigh, FindFileData.nFileSizeLow });
-                TempFileInfo.SetLastModified(FindFileData.ftLastWriteTime);
-                TempFileInfo.SetCreated(FindFileData.ftCreationTime);
-                TempFileInfo.SetAttributes(Attributes(FindFileData.dwFileAttributes));
-
-                result.Set(iter, TempFileInfo.ToNapiObject(env));
-                iter++;
-            } while (FindNextFileW(hFind, &FindFileData) != 0);
+            if (Utils::NapiHelpers::FileInfoVectorToArray(env, dirVector, result) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "listDir: FileManCore::Utils::NapiHelpers::FileInfoVectorToArray failed.").ThrowAsJavaScriptException();
+                return Napi::Array();
+            }
 
             return result;
         }
@@ -116,7 +74,7 @@ namespace FileManCore {
 
             std::u16string path = args[0].ToString().Utf16Value();
             if (Utils::Path::Canonicalise(path, path) != FMC_OK) {
-                Utils::NapiHelpers::BuildException(env, "normalizePath: Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
+                Utils::NapiHelpers::BuildException(env, "normalizePath: FileManCore::Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
                 return Napi::String();
             }
 
@@ -164,9 +122,8 @@ namespace FileManCore {
             }
 
             std::u16string filePath = args[0].ToString().Utf16Value();
-
-            if (ShellExecuteW(NULL, L"open", (LPWSTR)filePath.c_str(), NULL, NULL, SW_SHOW) <= (HINSTANCE)32) {
-                Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: ShellExecute failed").ThrowAsJavaScriptException();
+            if (Utils::OS::OpenWithDefaultApp(env, filePath) != FMC_OK) {
+                Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: FileManCore::Utils::OS::OpenWithDefaultApp failed").ThrowAsJavaScriptException();
                 return Napi::Boolean::New(env, false);
             }
 

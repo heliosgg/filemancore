@@ -8,7 +8,7 @@
 namespace FileManCore {
     namespace Utils {
         namespace NapiHelpers {
-            Napi::Error BuildException(Napi::Env& env, char* fmt, ...) {
+            Napi::Error BuildException(NAPI_ENV_ARG, char* fmt, ...) {
                 char szErrorMessage[255];
                 va_list args;
 
@@ -18,16 +18,26 @@ namespace FileManCore {
 
                 return Napi::Error::New(env, szErrorMessage);
             }
-        }
 
-        FMC_ERR StringVectorToArray(Napi::Env& env, std::vector<std::u16string>& inputVector, Napi::Array& outArray) {
-            size_t iter = 0;
+            FMC_ERR StringVectorToArray(NAPI_ENV_ARG, std::vector<std::u16string>& inputVector, Napi::Array& outArray) {
+                size_t iter = 0;
 
-            for (std::u16string& s : inputVector) {
-                outArray.Set(iter++, Napi::String::New(env, s));
+                for (std::u16string& s : inputVector) {
+                    outArray.Set(iter++, Napi::String::New(env, s));
+                }
+
+                return FMC_OK;
             }
 
-            return FMC_OK;
+            FMC_ERR FileInfoVectorToArray(NAPI_ENV_ARG, std::vector<FileManCore::FileInfo>& inputVector, Napi::Array& outArray) {
+                size_t iter = 0;
+
+                for (FileManCore::FileInfo& fi : inputVector) {
+                    outArray.Set(iter++, fi.ToNapiObject(env));
+                }
+
+                return FMC_OK;
+            }
         }
     }
 }

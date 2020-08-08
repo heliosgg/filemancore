@@ -1,5 +1,5 @@
 #include "FileInfo.h"
-#include "../Utils.h"
+#include "../utils/Utils.h"
 
 namespace FileManCore {
 
@@ -23,7 +23,7 @@ namespace FileManCore {
             FILETIME ft = m_lastModified.Get();
             FILETIME lt;
 
-            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Time::FileTime2TimePoint(lt, tp))
+            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Win::Time::FileTime2TimePoint(lt, tp))
             {
                 
                 result.Set("lastModified", Napi::Date::New(env,
@@ -38,7 +38,7 @@ namespace FileManCore {
             FILETIME ft = m_created.Get();
             FILETIME lt;
 
-            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Time::FileTime2TimePoint(lt, tp))
+            if (FileTimeToLocalFileTime(&ft, &lt) && Utils::Win::Time::FileTime2TimePoint(lt, tp))
             {
                 
                 result.Set("created", Napi::Date::New(env,

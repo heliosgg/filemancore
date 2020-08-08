@@ -5,7 +5,7 @@
 namespace FileManCore {
     namespace Utils {
         namespace Win {
-            namespace NapiHelpers {
+            namespace OS {
                 std::u16string GetLastErrorAsString();
             }
         }
