@@ -1,4 +1,7 @@
 #include <napi.h>
+#include <combaseapi.h>
+
+#pragma warning(disable : 4005) // does anyone know how to fix this?
 
 #include "Wrapper.h"
 
@@ -14,6 +17,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     ADD_EXPORT(normalizePath);
     ADD_EXPORT(moveFile);
     ADD_EXPORT(openWithDefaultApp);
+    ADD_EXPORT(getRemoteCWD);
 
 #undef ADD_EXPORT
 

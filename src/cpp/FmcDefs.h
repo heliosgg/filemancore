@@ -33,8 +33,13 @@
         return fail_ret_val;\
     }
 #define FMC_NAPI_VERIFY_ARG_STRING(n, fail_ret_val)\
-    if (!FMC_NAPI_EXPORT_ARGS[n]) {\
+    if (!FMC_NAPI_EXPORT_ARGS[n].IsString()) {\
         FMC_NAPI_EXCEPTION(FMC_MSG_ARG_MUST_BE(n, "string"));\
+        return fail_ret_val;\
+    }
+#define FMC_NAPI_VERIFY_ARG_NUMBER(n, fail_ret_val)\
+    if (!FMC_NAPI_EXPORT_ARGS[n].IsNumber()) {\
+        FMC_NAPI_EXCEPTION(FMC_MSG_ARG_MUST_BE(n, "number"));\
         return fail_ret_val;\
     }
 // -- Exception definitions

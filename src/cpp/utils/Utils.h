@@ -32,6 +32,7 @@ namespace FileManCore {
 
         namespace OS {
             FMC_ERR OpenWithDefaultApp(FMC_NAPI_ENV_ARG, const std::u16string& filePath);
+            FMC_ERR GetRemoteCWD(FMC_NAPI_ENV_ARG, uint32_t pid, std::u16string& outCWD);
         }
     }
 }

@@ -1,6 +1,6 @@
 #include "../Utils.h"
 
-#include <Windows.h>
+#include <phnt_windows.h>
 
 FMC_ERR FileManCore::Utils::Path::Canonicalise(const std::u16string& path, std::u16string& resultPath)
 {

@@ -1,10 +1,6 @@
 #pragma once
 
 #include <napi.h>
-#include <sstream>
-#include <Windows.h>
-#include <algorithm>
-#include <shellapi.h>
 
 #include "utils/Utils.h"
 #include "FmcDefs.h"
@@ -17,6 +13,7 @@ namespace FileManCore {
         FMC_NAPI_EXPORT(Napi::String, normalizePath);
         FMC_NAPI_EXPORT(Napi::Boolean, moveFile);
         FMC_NAPI_EXPORT(Napi::Boolean, openWithDefaultApp);
+        FMC_NAPI_EXPORT(Napi::String, getRemoteCWD);
     };
 
 }

@@ -27,4 +27,8 @@ function openWithDefaultApp(filePath: string): boolean {
   return fmCore.openWithDefaultApp(filePath);
 }
 
-export { listDir, listDrives, normalizePath, moveFile, openWithDefaultApp, FileInfo };
+function getRemoteCWD(pid: number): string {
+  return fmCore.getRemoteCWD(pid);
+}
+
+export { listDir, listDrives, normalizePath, moveFile, openWithDefaultApp, getRemoteCWD, FileInfo };

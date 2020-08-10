@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h> // TODO: fix it
+#include <phnt_windows.h> // TODO: fix it
 
 struct Attributes {
     Attributes() :

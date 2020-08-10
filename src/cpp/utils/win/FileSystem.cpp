@@ -1,6 +1,6 @@
 #include "../Utils.h"
 
-#include <Windows.h>
+#include <phnt_windows.h>
 
 using namespace FileManCore;
 

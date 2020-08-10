@@ -96,6 +96,22 @@ namespace FileManCore {
 
             return Napi::Boolean::New(FMC_NAPI_ENV, true);
         }
+
+        FMC_NAPI_EXPORT(Napi::String, getRemoteCWD) {
+            FMC_NAPI_ENV_INIT();
+
+            FMC_NAPI_VERIFY_ARGS_LENGTH(1, Napi::String());
+            FMC_NAPI_VERIFY_ARG_NUMBER(0, Napi::String());
+
+            uint32_t pid = FMC_NAPI_EXPORT_ARGS[0].ToNumber().Uint32Value();
+            std::u16string outPath;
+            if (Utils::OS::GetRemoteCWD(FMC_NAPI_ENV, pid, outPath) != FMC_OK) {
+                FMC_NAPI_EXCEPTION_REPEAT();
+                return Napi::String();
+            }
+
+            return Napi::String::New(FMC_NAPI_ENV, outPath);
+        }
     }
 
 }

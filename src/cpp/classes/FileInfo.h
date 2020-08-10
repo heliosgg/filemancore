@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include <phnt_windows.h>
 #include <string>
 #include <napi.h>
 
