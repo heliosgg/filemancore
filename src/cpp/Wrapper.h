@@ -12,11 +12,11 @@
 namespace FileManCore {
 
     namespace NapiWrapper {
-        Napi::Array listDir(NAPI_CB_ARGS);
-        Napi::Array listDrives(NAPI_CB_ARGS);
-        Napi::String normalizePath(NAPI_CB_ARGS);
-        Napi::Boolean moveFile(NAPI_CB_ARGS);
-        Napi::Boolean openWithDefaultApp(NAPI_CB_ARGS);
+        FMC_NAPI_EXPORT(Napi::Array, listDir);
+        FMC_NAPI_EXPORT(Napi::Array, listDrives);
+        FMC_NAPI_EXPORT(Napi::String, normalizePath);
+        FMC_NAPI_EXPORT(Napi::Boolean, moveFile);
+        FMC_NAPI_EXPORT(Napi::Boolean, openWithDefaultApp);
     };
 
 }

@@ -20,10 +20,10 @@ std::u16string FileManCore::Utils::Win::OS::GetLastErrorAsString() {
     return message;
 }
 
-FMC_ERR FileManCore::Utils::OS::OpenWithDefaultApp(NAPI_ENV_ARG, const std::u16string& filePath) {
+FMC_ERR FileManCore::Utils::OS::OpenWithDefaultApp(FMC_NAPI_ENV_ARG, const std::u16string& filePath) {
 
     if (ShellExecuteW(NULL, L"open", (LPWSTR)filePath.c_str(), NULL, NULL, SW_SHOW) <= (HINSTANCE)32) {
-        Utils::NapiHelpers::BuildException(env, "openWithDefaultApp: ShellExecute failed").ThrowAsJavaScriptException();
+        FMC_NAPI_EXCEPTION("ShellExecute failed");
         return FMC_UNKNOWN;
     }
 

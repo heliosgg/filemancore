@@ -4,7 +4,7 @@
 
 using namespace FileManCore;
 
-FMC_ERR FileManCore::Utils::FileSystem::ListDir(NAPI_ENV_ARG, const std::u16string& searchMaskWithRootDir, std::vector<FileManCore::FileInfo>& outVector) {
+FMC_ERR FileManCore::Utils::FileSystem::ListDir(FMC_NAPI_ENV_ARG, const std::u16string& searchMaskWithRootDir, std::vector<FileManCore::FileInfo>& outVector) {
 
     std::u16string searchMask = searchMaskWithRootDir;
     std::u16string rootDir;
@@ -24,7 +24,7 @@ FMC_ERR FileManCore::Utils::FileSystem::ListDir(NAPI_ENV_ARG, const std::u16stri
     }
 
     if (Utils::Path::Canonicalise(rootDir, rootDir) != FMC_OK) {
-        Utils::NapiHelpers::BuildException(env, "listDir: Utils::Path::Canonicalise failed").ThrowAsJavaScriptException();
+        FMC_NAPI_EXCEPTION("FileManCore::Utils::Path::Canonicalise failed");
         return FMC_UNKNOWN;
     }
 
@@ -33,10 +33,7 @@ FMC_ERR FileManCore::Utils::FileSystem::ListDir(NAPI_ENV_ARG, const std::u16stri
     FileManCore::FileInfo TempFileInfo;
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        Utils::NapiHelpers::BuildException(
-            env,
-            "listDir: FindFirstFileW failed. Last error: %S",
-            Utils::Win::OS::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+        FMC_NAPI_EXCEPTION("FindFirstFileW failed. Last error: %S", Utils::Win::OS::GetLastErrorAsString().c_str());
         return FMC_UNKNOWN;
     }
 
@@ -62,14 +59,11 @@ FMC_ERR FileManCore::Utils::FileSystem::ListDir(NAPI_ENV_ARG, const std::u16stri
     return FMC_OK;
 }
 
-FMC_ERR FileManCore::Utils::FileSystem::ListDrives(NAPI_ENV_ARG, std::vector<std::u16string>& outVector) {
+FMC_ERR FileManCore::Utils::FileSystem::ListDrives(FMC_NAPI_ENV_ARG, std::vector<std::u16string>& outVector) {
     DWORD uDriveMask = GetLogicalDrives();
 
     if(uDriveMask == 0) {
-        Utils::NapiHelpers::BuildException(
-            env,
-            "FileManCore::Utils::FileSystem::ListDrives: GetLogicalDrives failed. Last error: %S",
-            Utils::Win::OS::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+        FMC_NAPI_EXCEPTION("GetLogicalDrives failed. Last error: %S", Utils::Win::OS::GetLastErrorAsString().c_str());
         return FMC_UNKNOWN;
     }
 
@@ -87,12 +81,9 @@ FMC_ERR FileManCore::Utils::FileSystem::ListDrives(NAPI_ENV_ARG, std::vector<std
     return FMC_OK;
 }
 
-FMC_ERR FileManCore::Utils::FileSystem::MoveFile(NAPI_ENV_ARG, std::u16string& existingFileName, std::u16string& newFileName) {
+FMC_ERR FileManCore::Utils::FileSystem::MoveFile(FMC_NAPI_ENV_ARG, std::u16string& existingFileName, std::u16string& newFileName) {
     if (!::MoveFileW((LPWSTR)existingFileName.c_str(), (LPWSTR)newFileName.c_str())) {
-        Utils::NapiHelpers::BuildException(
-            env,
-            "FileManCore::Utils::FileSystem::MoveFile: MoveFileW failed. Last error: %S",
-            Utils::Win::OS::GetLastErrorAsString().c_str()).ThrowAsJavaScriptException();
+        FMC_NAPI_EXCEPTION("MoveFileW failed. Last error: %S", Utils::Win::OS::GetLastErrorAsString().c_str());
         return FMC_UNKNOWN;
     }
 

@@ -6,8 +6,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
-#define ADD_EXPORT(x) exports.Set(  Napi::String::New(env, #x),\
-                                    Napi::Function::New(env, FileManCore::NapiWrapper::x))
+#define ADD_EXPORT(x) exports.Set(  Napi::String::New(FMC_NAPI_ENV, #x),\
+                                    Napi::Function::New(FMC_NAPI_ENV, FileManCore::NapiWrapper::x))
 
     ADD_EXPORT(listDir);
     ADD_EXPORT(listDrives);
