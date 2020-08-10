@@ -1,10 +1,14 @@
 #pragma once
 
+#include "ConstExprs.h"
+
 #ifdef _WIN32
     #define FMC_FUNC_NAME __FUNCTION__
 #else
     #define FMC_FUNC_NAME __FUNCTION__
 #endif
+
+#define __FILENAME__ file_name(__FILE__)
 
 #define FMC_NAPI_EXPORT_ARGS_ARG const Napi::CallbackInfo& args
 #define FMC_NAPI_EXPORT_ARGS args
@@ -17,8 +21,8 @@
 
 // Exception definitions
 #define FMC_NAPI_EXCEPTION(msg, ...) FileManCore::Utils::NapiHelpers::BuildException(FMC_NAPI_ENV,\
-            FMC_FUNC_NAME "(%u): " msg, __LINE__, __VA_ARGS__).ThrowAsJavaScriptException()
-#define FMC_NAPI_EXCEPTION_REPEAT() FMC_NAPI_EXCEPTION("Previous function failed.")
+            "%s - %s(%u): " msg, __FILENAME__, FMC_FUNC_NAME, __LINE__, __VA_ARGS__).ThrowAsJavaScriptException()
+#define FMC_NAPI_EXCEPTION_REPEAT() if (!FMC_NAPI_ENV.IsExceptionPending()) FMC_NAPI_EXCEPTION("Previous function failed.")
 
 #define FMC_MSG_TAKES_N(n) "Function takes " #n " argument(s)"
 #define FMC_MSG_ARG_MUST_BE(n, type) "Argument " #n "must be " type
