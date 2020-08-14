@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <stdarg.h>
 
-#pragma comment(lib, "Mpr.lib")
-
 namespace FileManCore {
     namespace Utils {
         namespace NapiHelpers {

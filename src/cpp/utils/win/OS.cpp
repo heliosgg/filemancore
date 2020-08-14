@@ -4,8 +4,6 @@
 #include <phnt_windows.h>
 #include <phnt.h>
 
-#pragma comment(lib, "Ntdll.lib")
-
 std::u16string FileManCore::Utils::Win::OS::GetLastErrorAsString() {
     //Get the error message, if any.
     DWORD errorMessageID = ::GetLastError();

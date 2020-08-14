@@ -12,6 +12,10 @@
         "./src/cpp/utils/win/Path.cpp",
         "./src/cpp/utils/win/Time.cpp",
       ],
+      "libraries": [
+        "Mpr.lib",
+        "Ntdll.lib",
+      ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "./src/cpp/utils/win/phnt/include/"
