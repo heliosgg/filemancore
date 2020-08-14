@@ -24,14 +24,21 @@
     "install": "node scripts/install.js",
     "postinstall": "node scripts/post-install.js",
     "tsc": "tsc -b ./tsconfig.json",
-    "prepublish": "npm run tsc"
+    "prepublish": "npm run tsc",
+    "test": "ts-mocha -r ts-node/register test/**/*.spec.ts"
   },
   "keywords": [],
   "author": "Andrey Ivanov",
   "license": "ISC",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.2",
     "@types/node": "^14.0.14",
+    "chai": "^4.2.0",
+    "mocha": "^8.1.1",
     "node-addon-api": "^3.0.0",
-    "typescript": "^3.9.6"
+    "ts-mocha": "^7.0.0",
+    "typescript": "^3.9.7"
   }
 }
