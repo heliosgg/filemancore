@@ -5,8 +5,8 @@ import { expect } from "chai";
 import { mkdirSync, rmdirSync } from "fs";
 import { cwd } from "process";
 
-describe("Path functions", () => {
-    describe("normalizePath", () => {
+describe('Path functions', () => {
+    describe('normalizePath', () => {
         before(() => {
             mkdirSync('.\\test_folder_0\\very\\long\\path\\bla\\bla\\lol', { recursive: true });
         });
