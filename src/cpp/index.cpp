@@ -18,6 +18,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     ADD_EXPORT(moveFile);
     ADD_EXPORT(openWithDefaultApp);
     ADD_EXPORT(getRemoteCWD);
+    ADD_EXPORT(createEmptyFile);
 
 #undef ADD_EXPORT
 

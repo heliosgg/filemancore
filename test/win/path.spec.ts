@@ -7,44 +7,48 @@ import { cwd } from "process";
 
 describe('Path functions', () => {
     describe('normalizePath', () => {
+        let currentTestFolderWithoutDot = '\\test_folder_0';
+        let currentTestFolder = '.' + currentTestFolderWithoutDot;
+
         before(() => {
-            mkdirSync('.\\test_folder_0\\very\\long\\path\\bla\\bla\\lol', { recursive: true });
+            mkdirSync(currentTestFolder + '\\very\\long\\path\\bla\\bla\\lol', { recursive: true });
         });
     
         after(() => {
-            rmdirSync('.\\test_folder_0', { recursive: true });
+            rmdirSync(currentTestFolder, { recursive: true });
         });
 
         let curDir = cwd();
+        let cwdCurrentTestFolder = curDir + currentTestFolderWithoutDot;
 
         it('should expand leading dot', () => {
-            expect(normalizePath('.\\test_folder_0\\very\\'))
-                .to.equal(curDir + '\\test_folder_0\\very\\');
+            expect(normalizePath(currentTestFolder + '\\very\\'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\');
         });
 
         it('should collapse double dot', () => {
-            expect(normalizePath('.\\test_folder_0\\very\\long\\kek\\..\\path'))
-                .to.equal(curDir + '\\test_folder_0\\very\\long\\path');
+            expect(normalizePath(currentTestFolder + '\\very\\long\\kek\\..\\path'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\long\\path');
         });
 
         it('should collapse trailing double dot', () => {
-            expect(normalizePath('.\\test_folder_0\\very\\long\\path\\bla\\bla\\lol\\..'))
-                .to.equal(curDir + '\\test_folder_0\\very\\long\\path\\bla\\bla');
+            expect(normalizePath(currentTestFolder + '\\very\\long\\path\\bla\\bla\\lol\\..'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\long\\path\\bla\\bla');
         });
 
         it('should collapse a lot of double dot', () => {
-            expect(normalizePath('.\\test_folder_0\\very\\long\\kek\\bla\\lol\\..\\..\\..\\path'))
-                .to.equal(curDir + '\\test_folder_0\\very\\long\\path');
+            expect(normalizePath(currentTestFolder + '\\very\\long\\kek\\bla\\lol\\..\\..\\..\\path'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\long\\path');
         });
 
         it('should remove a lot of useless slashes', () => {
-            expect(normalizePath('.\\test_folder_0\\\\\\\\\\very\\\\\\\\long\\\\path\\bla\\bla\\\\lol'))
-                .to.equal(curDir + '\\test_folder_0\\very\\long\\path\\bla\\bla\\lol');
+            expect(normalizePath(currentTestFolder + '\\\\\\\\\\very\\\\\\\\long\\\\path\\bla\\bla\\\\lol'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\long\\path\\bla\\bla\\lol');
         });
 
         it('should flip forward slashes to backslashes', () => {
-            expect(normalizePath('./test_folder_0\\very/long\\path/bla\\bla/lol'))
-                .to.equal(curDir + '\\test_folder_0\\very\\long\\path\\bla\\bla\\lol');
+            expect(normalizePath('./'+ currentTestFolder.substr(2) + '\\very/long\\path/bla\\bla/lol'))
+                .to.equal(cwdCurrentTestFolder + '\\very\\long\\path\\bla\\bla\\lol');
         });
     });
 });

@@ -88,7 +88,7 @@ namespace FileManCore {
             FMC_NAPI_VERIFY_ARGS_LENGTH(1, Napi::Boolean::New(FMC_NAPI_ENV, false));
             FMC_NAPI_VERIFY_ARG_STRING(0, Napi::Boolean::New(FMC_NAPI_ENV, false));
 
-            std::u16string filePath = args[0].ToString().Utf16Value();
+            std::u16string filePath = FMC_NAPI_EXPORT_ARGS[0].ToString().Utf16Value();
             if (Utils::OS::OpenWithDefaultApp(FMC_NAPI_ENV, filePath) != FMC_OK) {
                 FMC_NAPI_EXCEPTION_REPEAT();
                 return Napi::Boolean::New(FMC_NAPI_ENV, false);
@@ -111,6 +111,23 @@ namespace FileManCore {
             }
 
             return Napi::String::New(FMC_NAPI_ENV, outPath);
+        }
+
+        FMC_NAPI_EXPORT(Napi::Boolean, createEmptyFile) {
+            FMC_NAPI_ENV_INIT();
+
+            FMC_NAPI_VERIFY_ARGS_LENGTH(2, Napi::Boolean::New(FMC_NAPI_ENV, false));
+            FMC_NAPI_VERIFY_ARG_STRING(0, Napi::Boolean::New(FMC_NAPI_ENV, false));
+            FMC_NAPI_VERIFY_ARG_BOOL(1, Napi::Boolean::New(FMC_NAPI_ENV, false));
+            
+            std::u16string filePath = FMC_NAPI_EXPORT_ARGS[0].ToString().Utf16Value();
+            bool eraseIfExist = FMC_NAPI_EXPORT_ARGS[1].ToBoolean().Value();
+            if (Utils::FileSystem::CreateEmptyFile(FMC_NAPI_ENV, filePath, eraseIfExist) != FMC_OK) {
+                FMC_NAPI_EXCEPTION_REPEAT();
+                return Napi::Boolean::New(FMC_NAPI_ENV, false);
+            }
+
+            return Napi::Boolean::New(FMC_NAPI_ENV, true);
         }
     }
 

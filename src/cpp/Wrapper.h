@@ -14,6 +14,7 @@ namespace FileManCore {
         FMC_NAPI_EXPORT(Napi::Boolean, moveFile);
         FMC_NAPI_EXPORT(Napi::Boolean, openWithDefaultApp);
         FMC_NAPI_EXPORT(Napi::String, getRemoteCWD);
+        FMC_NAPI_EXPORT(Napi::Boolean, createEmptyFile);
     };
 
 }

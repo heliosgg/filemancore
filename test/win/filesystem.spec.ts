@@ -1,22 +1,24 @@
 // Test namespace FileManCore::Utils::FileSystem
 
-import { FileInfo, listDir, listDrives, moveFile } from "../../lib/index";
-import { expect, assert } from "chai";
-import { mkdirSync, rmdirSync, writeFileSync, existsSync, readFileSync } from "fs";
+import { FileInfo, listDir, listDrives, moveFile, createEmptyFile } from "../../lib/index";
+import { expect } from "chai";
+import { mkdirSync, rmdirSync, writeFileSync, existsSync, readFileSync, statSync } from "fs";
 import { cwd } from "process";
 
 describe('FileSystem functions', () => {
+    let currentTestFolder = '.\\test_folder_1';
+
     before(() => {
-        mkdirSync('.\\test_folder_1\\some\\path', { recursive: true });
-        mkdirSync('.\\test_folder_1\\another', { recursive: true });
-        writeFileSync('.\\test_folder_1\\for.mask', 'hello');
-        writeFileSync('.\\test_folder_1\\forfor.mask', 'qq');
-        writeFileSync('.\\test_folder_1\\withoutMask', 'opta');
-        writeFileSync('.\\test_folder_1\\move.me', 'bruh');
+        mkdirSync(currentTestFolder + '\\some\\path', { recursive: true });
+        mkdirSync(currentTestFolder + '\\another', { recursive: true });
+        writeFileSync(currentTestFolder + '\\for.mask', 'hello');
+        writeFileSync(currentTestFolder + '\\forfor.mask', 'qq');
+        writeFileSync(currentTestFolder + '\\withoutMask', 'opta');
+        writeFileSync(currentTestFolder + '\\move.me', 'bruh');
     });
 
     after(() => {
-        rmdirSync('.\\test_folder_1', { recursive: true });
+        rmdirSync(currentTestFolder, { recursive: true });
     });
     
     let curDir = cwd();
@@ -29,13 +31,13 @@ describe('FileSystem functions', () => {
 
     describe('listDir', () => {
         it('should return something', () => {
-            expect(listDir('.\\test_folder_1').length).to.be.gte(1);
+            expect(listDir(currentTestFolder).length).to.be.gte(1);
         });
         
         it('should return some and another directory', () => {
-            let l = listDir('.\\test_folder_1');
+            let l = listDir(currentTestFolder);
 
-            l.every(x => expect(x).to.have.own.property('path', curDir + "\\test_folder_1\\" ));
+            l.every(x => expect(x).to.have.own.property('path', curDir + currentTestFolder.substr(1) + '\\' ));
             l.every(x => expect(x).to.have.nested.property('attributes.hidden', false ));
             l.every(x => expect(x).to.have.nested.property('attributes.readonly', false ));
             l.every(x => expect(x).to.have.nested.property('attributes.system', false ));
@@ -58,7 +60,7 @@ describe('FileSystem functions', () => {
         });
 
         it('should work with masks', () => {
-            let l = listDir('.\\test_folder_1\\*.mask');
+            let l = listDir(currentTestFolder + '\\*.mask');
 
             l.every(x => expect(x).to.not.have.nested.property('attributes.directory', true ));
 
@@ -69,13 +71,38 @@ describe('FileSystem functions', () => {
         });
     });
 
-    describe("moveFile", () => {
+    describe('moveFile', () => {
         it('should move files', () => {
-            expect(existsSync('.\\test_folder_1\\move.me')).to.be.true;
-            expect(moveFile('.\\test_folder_1\\move.me', '.\\test_folder_1\\some\\path\\new.name')).to.be.true;
-            expect(existsSync('.\\test_folder_1\\move.me')).to.be.false;
-            expect(existsSync('.\\test_folder_1\\some\\path\\new.name')).to.be.true;
-            expect(readFileSync('.\\test_folder_1\\some\\path\\new.name').toString()).to.be.equal('bruh');
+            expect(existsSync(currentTestFolder + '\\move.me')).to.be.true;
+            expect(moveFile(currentTestFolder + '\\move.me', currentTestFolder + '\\some\\path\\new.name')).to.be.true;
+            expect(existsSync(currentTestFolder + '\\move.me')).to.be.false;
+            expect(existsSync(currentTestFolder + '\\some\\path\\new.name')).to.be.true;
+            expect(readFileSync(currentTestFolder + '\\some\\path\\new.name').toString()).to.be.equal('bruh');
+        });
+    });
+
+
+    describe('createEmptyFile', () => {
+        it('should create empty file', () => {
+            let fileToCreate = currentTestFolder + '\\createEmptyFile.txt';
+
+            expect(existsSync(fileToCreate)).to.be.false;
+            expect(createEmptyFile(fileToCreate, false)).to.be.true;
+            expect(existsSync(fileToCreate)).to.be.true;
+            expect(statSync(fileToCreate).size).to.be.equal(0);
+        });
+        
+        it('should erase existing file, if eraseIfExist true', () => {
+            let fileToCreate = currentTestFolder + '\\eraseNotEmptyFile.txt';
+
+            expect(existsSync(fileToCreate)).to.be.false;
+            writeFileSync(fileToCreate, 'hello, world');
+            expect(existsSync(fileToCreate)).to.be.true;
+            expect(statSync(fileToCreate).size).not.to.be.equal(0);
+
+            expect(createEmptyFile(fileToCreate, true)).to.be.true;
+            expect(existsSync(fileToCreate)).to.be.true;
+            expect(statSync(fileToCreate).size).to.be.equal(0);
         });
     });
 });

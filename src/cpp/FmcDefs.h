@@ -24,12 +24,11 @@
             "%s - %s(%u): " msg, __FILENAME__, FMC_FUNC_NAME, __LINE__, __VA_ARGS__).ThrowAsJavaScriptException()
 #define FMC_NAPI_EXCEPTION_REPEAT() if (!FMC_NAPI_ENV.IsExceptionPending()) FMC_NAPI_EXCEPTION("Previous function failed.")
 
-#define FMC_MSG_TAKES_N(n) "Function takes " #n " argument(s)"
 #define FMC_MSG_ARG_MUST_BE(n, type) "Argument " #n "must be " type
 
 #define FMC_NAPI_VERIFY_ARGS_LENGTH(lenght, fail_ret_val)\
     if (FMC_NAPI_EXPORT_ARGS.Length() != lenght) {\
-        FMC_NAPI_EXCEPTION(FMC_MSG_TAKES_N(lenght));\
+        FMC_NAPI_EXCEPTION("Function takes " #lenght " argument(s)");\
         return fail_ret_val;\
     }
 #define FMC_NAPI_VERIFY_ARG_STRING(n, fail_ret_val)\
@@ -42,10 +41,16 @@
         FMC_NAPI_EXCEPTION(FMC_MSG_ARG_MUST_BE(n, "number"));\
         return fail_ret_val;\
     }
+#define FMC_NAPI_VERIFY_ARG_BOOL(n, fail_ret_val)\
+    if (!FMC_NAPI_EXPORT_ARGS[n].IsBoolean()) {\
+        FMC_NAPI_EXCEPTION(FMC_MSG_ARG_MUST_BE(n, "boolean"));\
+        return fail_ret_val;\
+    }
 // -- Exception definitions
 
 enum FMC_ERR {
     FMC_OK = 0,
     FMC_UNKNOWN = 1,
     FMC_BADPARAM = 2,
+    FMC_ALREADYEXIST = 3
 };

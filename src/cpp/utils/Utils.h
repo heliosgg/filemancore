@@ -28,6 +28,8 @@ namespace FileManCore {
             FMC_ERR ListDir(FMC_NAPI_ENV_ARG, const std::u16string& searchMaskWithRootDir, std::vector<FileManCore::FileInfo>& outVector);
             FMC_ERR ListDrives(FMC_NAPI_ENV_ARG, std::vector<std::u16string>& outVector);
             FMC_ERR MoveFile(FMC_NAPI_ENV_ARG, std::u16string& existingFileName, std::u16string& newFileName);
+            FMC_ERR CreateEmptyFile(FMC_NAPI_ENV_ARG, const std::u16string& fileName, bool eraseIfExist);
+            bool FileExist(FMC_NAPI_ENV_ARG, const std::u16string& fileName);
         }
 
         namespace OS {

@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <stdarg.h>
+#include <fstream>
+#include <sys/stat.h>
 
 namespace FileManCore {
     namespace Utils {
@@ -35,6 +37,29 @@ namespace FileManCore {
                 }
 
                 return FMC_OK;
+            }
+        }
+
+        namespace FileSystem {
+            FMC_ERR CreateEmptyFile(FMC_NAPI_ENV_ARG, const std::u16string& fileName, bool eraseIfExist) {
+                if (FileExist(FMC_NAPI_ENV, fileName) && !eraseIfExist) {
+                    FMC_NAPI_EXCEPTION("File already exists. You can pass eraseIfExist true");
+                    return FMC_ALREADYEXIST;
+                }
+
+                std::ofstream f((wchar_t*)fileName.c_str());
+                if (!f.good()) {
+                    FMC_NAPI_EXCEPTION("Failed to create file");
+                    return FMC_UNKNOWN;
+                }
+
+                f.close();
+                return FMC_OK;
+            }
+
+            bool FileExist(FMC_NAPI_ENV_ARG, const std::u16string& fileName) {
+                struct _stat buffer;
+                return (_wstat((wchar_t*)fileName.c_str(), &buffer) == 0); 
             }
         }
     }

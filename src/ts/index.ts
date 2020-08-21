@@ -31,4 +31,8 @@ function getRemoteCWD(pid: number): string {
   return fmCore.getRemoteCWD(pid);
 }
 
-export { listDir, listDrives, normalizePath, moveFile, openWithDefaultApp, getRemoteCWD, FileInfo };
+function createEmptyFile(filePath: string, eraseIfExist = false): boolean {
+  return fmCore.createEmptyFile(filePath, eraseIfExist);
+}
+
+export { listDir, listDrives, normalizePath, moveFile, openWithDefaultApp, getRemoteCWD, createEmptyFile, FileInfo };

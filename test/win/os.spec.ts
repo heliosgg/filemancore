@@ -6,13 +6,15 @@ import { cwd, pid } from "process";
 import { mkdirSync, rmdirSync, writeFileSync } from "fs";
 
 describe('OS functions', () => {
+    let currentTestFolder = '.\\test_folder_2';
+
     before(() => {
-        mkdirSync('.\\test_folder_2');
-        writeFileSync('.\\test_folder_2\\random_file.bat', 'exit /b 0\n');
+        mkdirSync(currentTestFolder);
+        writeFileSync(currentTestFolder + '\\random_file.bat', 'exit /b 0\n');
     });
 
     after(() => {
-        rmdirSync('.\\test_folder_2', { recursive: true });
+        rmdirSync(currentTestFolder, { recursive: true });
     });
 
     let curDir = cwd();
@@ -20,7 +22,7 @@ describe('OS functions', () => {
 
     describe('openWithDefaultApp', () => {
         it('should not fail', () => {
-            expect(openWithDefaultApp('.\\test_folder_2\\random_file.bat')).to.be.true;
+            expect(openWithDefaultApp(currentTestFolder + '\\random_file.bat')).to.be.true;
         });
     });
 
